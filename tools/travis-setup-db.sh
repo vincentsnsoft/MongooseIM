@@ -70,8 +70,8 @@ ByteaAsLongVarBinary = 1
 EOL
 
 elif [ $DB = 'riak' ]; then
-    ls -l ${RIAKDIR}
-    cat ${RIAKDIR}/riak.conf | grep ssl
+    ls -l ${RIAK_DIR}
+    cat ${RIAK_DIR}/riak.conf | grep ssl
     cp ${SSLDIR}/fake_cert.pem ${RIAK_DIR}/cert.pem
     cp ${SSLDIR}/fake_key.pem ${RIAK_DIR}/key.pem
     cp ${SSLDIR}/cacert.pem ${RIAK_DIR}/cacertfile.pem
