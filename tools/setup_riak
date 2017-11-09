@@ -33,7 +33,13 @@ curl -v -XPUT $RIAK_HOST/search/index/mam \
 
 sleep 20
 
-RIAK_ADMIN="docker exec -i ${RIAK_CONTAINER_NAME} riak-admin"
+RIAK_ADMIN="riak-admin"
+
+$RIAK_ADMIN security enable
+
+$RIAK_ADMIN security add-user ejabberd password=${TRAVIS_DB_PASSWORD}
+
+$RIAK_ADMIN security add-source ejabberd 0.0.0.0/32 password
 
 $RIAK_ADMIN bucket-type create users '{"props":{"datatype":"map"}}'
 $RIAK_ADMIN bucket-type activate users

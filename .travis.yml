@@ -10,19 +10,19 @@ addons:
         - slapd
         - ldap-utils
 before_install:
-        - curl -L https://github.com/docker/compose/releases/download/1.11.2/docker-compose-`uname -s`-`uname -m` > docker-compose
-        - chmod +x docker-compose
-        - sudo mv docker-compose /usr/local/bin
+        #- curl -L https://github.com/docker/compose/releases/download/1.11.2/docker-compose-`uname -s`-`uname -m` > docker-compose
+        #- chmod +x docker-compose
+        #- sudo mv docker-compose /usr/local/bin
         - tools/travis-generate-pass.sh
-        - tools/configure $REL_CONFIG
+        #- tools/configure $REL_CONFIG
 install:
-        - ./rebar3 compile
-        - make dev
-        - tools/travis-build-tests.sh
+        #- ./rebar3 compile
+        #- make dev
+        #- tools/travis-build-tests.sh
 before_script:
         - tools/travis-setup-db.sh
-        - if [ $PRESET = 'ldap_mnesia' ]; then sudo tools/travis-setup-ldap.sh; fi
-script: tools/travis-test.sh -p $PRESET
+        #- if [ $PRESET = 'ldap_mnesia' ]; then sudo tools/travis-setup-ldap.sh; fi
+script: echo "ok"
 
 after_failure:
         - cat `ls -1 -d -t apps/ejabberd/logs/ct_run* | head -1`/apps.ejabberd.logs/run.*/suite.log
@@ -32,8 +32,8 @@ after_failure:
         - tail -100 _build/mim2/rel/mongooseim/log/ejabberd.log
 
 after_success:
-        - ./rebar3 coveralls send
-        - if [ $PRESET = 'internal_mnesia' ] && [ $TRAVIS_OTP_RELEASE = "19.3" ]; then tools/travis-build-and-push-docker.sh; fi
+        #- ./rebar3 coveralls send
+        #- if [ $PRESET = 'internal_mnesia' ] && [ $TRAVIS_OTP_RELEASE = "19.3" ]; then tools/travis-build-and-push-docker.sh; fi
 
 after_script:
         - sudo pip install awscli --ignore-installed six
@@ -42,6 +42,7 @@ after_script:
 services:
         - redis-server
         - docker
+        - riak
 
 branches:
         only:
@@ -53,18 +54,18 @@ branches:
 otp_release:
         - 19.3
 env:
-        - PRESET=internal_mnesia DB=mnesia REL_CONFIG=with-all TLS_DIST=yes
-        - PRESET=mysql_redis DB=mysql REL_CONFIG="with-mysql with-redis"
-        - PRESET=odbc_pgsql_mnesia DB=pgsql REL_CONFIG=with-odbc
-        - PRESET=ldap_mnesia DB=mnesia REL_CONFIG=with-none
-        - PRESET=cassandra_mnesia DB=cassandra REL_CONFIG=with-cassandra CASSANDRA_VERSION=3.9
+        #- PRESET=internal_mnesia DB=mnesia REL_CONFIG=with-all TLS_DIST=yes
+        #- PRESET=mysql_redis DB=mysql REL_CONFIG="with-mysql with-redis"
+        #- PRESET=odbc_pgsql_mnesia DB=pgsql REL_CONFIG=with-odbc
+        #- PRESET=ldap_mnesia DB=mnesia REL_CONFIG=with-none
+        #- PRESET=cassandra_mnesia DB=cassandra REL_CONFIG=with-cassandra CASSANDRA_VERSION=3.9
 
 matrix:
     include:
-        - otp_release: 20.0
-          env: PRESET=dialyzer_only
-        - otp_release: 20.0
-          env: PRESET=pgsql_mnesia DB=pgsql REL_CONFIG=with-pgsql
+        #- otp_release: 20.0
+        #  env: PRESET=dialyzer_only
+        #- otp_release: 20.0
+        #  env: PRESET=pgsql_mnesia DB=pgsql REL_CONFIG=with-pgsql
         - otp_release: 18.3
           env: PRESET=riak_mnesia DB=riak REL_CONFIG=with-riak
 
