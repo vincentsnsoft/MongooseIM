@@ -14,7 +14,7 @@ MYSQL_CONF_DIR=/etc/mysql/conf.d
 
 PGSQL_ODBC_CERT_DIR=~/.postgresql
 
-RIAK_DIR=~/etc/riak
+RIAK_DIR=/etc/riak
 
 TRAVIS_DB_PASSWORD=$(cat /tmp/travis_db_password)
 
@@ -74,7 +74,7 @@ elif [ $DB = 'riak' ]; then
     cat ${RIAK_DIR}/riak.conf | grep ssl
     cp ${SSLDIR}/fake_cert.pem ${RIAK_DIR}/cert.pem
     cp ${SSLDIR}/fake_key.pem ${RIAK_DIR}/key.pem
-    cp ${SSLDIR}/cacert.pem ${RIAK_DIR}/cacertfile.pem
+    cp ${SSLDIR}/ca/cacert.pem ${RIAK_DIR}/cacertfile.pem
     cp ${MIM_PRIV_DIR}/riak-advanced.config ${RIAK_DIR}/advanced.config
     tools/setup_riak
     riak restart

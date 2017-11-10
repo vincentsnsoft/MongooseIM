@@ -14,10 +14,10 @@ before_install:
         #- chmod +x docker-compose
         #- sudo mv docker-compose /usr/local/bin
         - tools/travis-generate-pass.sh
-        - tools/configure $REL_CONFIG
+        #- tools/configure $REL_CONFIG
 install:
-        - ./rebar3 compile
-        - make dev
+        #- ./rebar3 compile
+        - make certs
         #- tools/travis-build-tests.sh
 before_script:
         - tools/travis-setup-db.sh
@@ -52,7 +52,7 @@ branches:
                 - /^\d+\.\d+\.\d+([a-z0-9\-\+])*/
 
 otp_release:
-        - 19.3
+        #- 19.3
 env:
         #- PRESET=internal_mnesia DB=mnesia REL_CONFIG=with-all TLS_DIST=yes
         #- PRESET=mysql_redis DB=mysql REL_CONFIG="with-mysql with-redis"
