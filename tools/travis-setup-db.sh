@@ -71,13 +71,14 @@ EOL
 
 elif [ $DB = 'riak' ]; then
     ls -l ${RIAK_DIR}
+    cat ${RIAK_DIR}/riak.conf
     cat ${RIAK_DIR}/riak.conf | grep ssl
-    cp ${SSLDIR}/fake_cert.pem ${RIAK_DIR}/cert.pem
-    cp ${SSLDIR}/fake_key.pem ${RIAK_DIR}/key.pem
-    cp ${SSLDIR}/ca/cacert.pem ${RIAK_DIR}/cacertfile.pem
-    cp ${MIM_PRIV_DIR}/riak-advanced.config ${RIAK_DIR}/advanced.config
-    tools/setup_riak
-    riak restart
+    sudo cp ${SSLDIR}/fake_cert.pem ${RIAK_DIR}/cert.pem
+    sudo cp ${SSLDIR}/fake_key.pem ${RIAK_DIR}/key.pem
+    sudo cp ${SSLDIR}/ca/cacert.pem ${RIAK_DIR}/cacertfile.pem
+    sudo cp ${MIM_PRIV_DIR}/riak-advanced.config ${RIAK_DIR}/advanced.config
+    sudo tools/setup_riak
+    sudo service riak restart
 
 elif [ $DB = 'cassandra' ]; then
     docker run -d -p 9042:9042 -e MAX_HEAP_SIZE=128M -e HEAP_NEWSIZE=64M --name=cassandra cassandra:${CASSANDRA_VERSION}
