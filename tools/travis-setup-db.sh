@@ -16,6 +16,8 @@ PGSQL_ODBC_CERT_DIR=~/.postgresql
 
 RIAK_DIR=/etc/riak
 
+RIAK_CONF_DIR=${BASE}/${TOOLS}/db_configs/riak
+
 TRAVIS_DB_PASSWORD=$(cat /tmp/travis_db_password)
 
 SSLDIR=${BASE}/${TOOLS}/ssl
@@ -74,8 +76,8 @@ elif [ $DB = 'riak' ]; then
     sudo cp ${SSLDIR}/fake_cert.pem ${RIAK_DIR}/cert.pem
     sudo cp ${SSLDIR}/fake_key.pem ${RIAK_DIR}/key.pem
     sudo cp ${SSLDIR}/ca/cacert.pem ${RIAK_DIR}/cacertfile.pem
-    sudo cp ${MIM_PRIV_DIR}/riak-advanced.config ${RIAK_DIR}/advanced.config
-    sudo cp ${MIM_PRIV_DIR}/riak.conf ${RIAK_DIR}/riak.conf
+    sudo cp ${RIAK_CONF_DIR}/advanced.config ${RIAK_DIR}/advanced.config
+    sudo cp ${RIAK_CONF_DIR}/riak.conf ${RIAK_DIR}/riak.conf
     sudo service riak restart
     echo "Setup Riak"
     sudo tools/setup_riak
