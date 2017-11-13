@@ -10,7 +10,9 @@ SQLDIR=${BASE}/apps/ejabberd/priv
 
 SQL_TEMP_DIR=/tmp/sql
 
-MYSQL_CONF_DIR=/etc/mysql/conf.d
+MYSQL_DIR=/etc/mysql/conf.d
+
+PGSQL_CONF_DIR=${BASE}/${TOOLS}/db_configs/postgres
 
 PGSQL_ODBC_CERT_DIR=~/.postgresql
 
@@ -30,7 +32,7 @@ if [ $DB = 'mysql' ]; then
         -e MYSQL_DATABASE=ejabberd \
         -e MYSQL_USER=ejabberd \
         -e MYSQL_PASSWORD=$TRAVIS_DB_PASSWORD \
-        -v ${SQLDIR}/mysql.cnf:${MYSQL_CONF_DIR}/mysql.cnf:ro \
+        -v ${SQLDIR}/mysql.cnf:${MYSQL_DIR}/mysql.cnf:ro \
         -v ${SQLDIR}/mysql.sql:/docker-entrypoint-initdb.d/mysql.sql:ro \
         -v ${BASE}/${TOOLS}/docker-setup-mysql.sh:/docker-entrypoint-initdb.d/docker-setup-mysql.sh \
         -v ${SQL_TEMP_DIR}:${SQL_TEMP_DIR} \
@@ -42,15 +44,15 @@ elif [ $DB = 'pgsql' ]; then
     mkdir ${SQL_TEMP_DIR}
     cp ${SSLDIR}/fake_cert.pem ${SQL_TEMP_DIR}/.
     cp ${SSLDIR}/fake_key.pem ${SQL_TEMP_DIR}/.
-    cp ${SQLDIR}/postgresql.conf ${SQL_TEMP_DIR}/.
-    cp ${SQLDIR}/pg_hba.conf ${SQL_TEMP_DIR}/.
     cp ${SQLDIR}/pg.sql ${SQL_TEMP_DIR}/.
+    cp ${PGSQL_CONF_DIR}/postgresql.conf ${SQL_TEMP_DIR}/.
+    cp ${PGSQL_CONF_DIR}/pg_hba.conf ${SQL_TEMP_DIR}/.
     docker run -d \
            -e SQL_TEMP_DIR=${SQL_TEMP_DIR} \
            -e TRAVIS_DB_PASSWORD=${TRAVIS_DB_PASSWORD} \
            -v ${SQL_TEMP_DIR}:${SQL_TEMP_DIR} \
            -v ${BASE}/${TOOLS}/docker-setup-postgres.sh:/docker-entrypoint-initdb.d/docker-setup-postgres.sh \
-           -p 5432:5432 --name=mongooseim-psql postgres
+           -p 5432:5432 --name=mongooseim-pgsql postgres
     mkdir ${PGSQL_ODBC_CERT_DIR} || echo "PGSQL odbc cert dir already exists"
     cp ${SSLDIR}/ca/cacert.pem ${PGSQL_ODBC_CERT_DIR}/root.crt
     cat > ~/.odbc.ini << EOL
